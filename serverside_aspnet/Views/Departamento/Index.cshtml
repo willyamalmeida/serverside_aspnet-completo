@@ -1,0 +1,79 @@
+﻿@using System
+@using serverside_aspnet.Helpers
+
+@{
+    ViewData["Title"] = "Departamento";
+
+    var idComponente = Guid.NewGuid().ToString("N");
+
+    var modelParaOClientSide = new
+    {
+        pagina = 1,
+        quantidade = 5
+    };
+}
+
+<div id="@(idComponente)" class="painel views-departamento-index">
+    <nav class="barra-botoes">
+        @Html.ActionLink("Novo", "Novo", new { }, new { @class = "btn btn-default btn-sm", @role = "button" })
+    </nav>
+
+    <h3 class="titulo">Informações do Departamento</h3>
+
+    <div class="form-group row">
+        <div class="col-sm-4">
+            @Html.TextBox("filtro", null, new { @class = "form-control form-control-sm", @placeholder = "Filtro..." })
+        </div>
+    </div>
+
+    <div class="form-group row">
+        <div class="col-sm-12">
+            <table name="tabela" class="table table-sm table-condensed table-hover">
+                <thead class="thead-dark">
+                    <tr>
+                        <th class="col-1" scope="col">Código</th>
+                        <th class="col" scope="col" colspan="2">Descrição</th>
+                    </tr>
+                </thead>
+                <tbody>
+                </tbody>
+                <tfoot>
+                    <tr>
+                        <th class="col-1">
+                            <button class="btn btn-link border btn-sm" name="atualizar">
+                                <img src="~/images/atualizar.svg" />
+                            </button>
+                        </th>
+                        <th class="col-10 align-items-center">
+                            @(Html.TreinamentoPaginacao("paginacao")
+                                  .Controller("Departamento")
+                                  .Action("ConsultePaginado")
+                                  .Pagina(modelParaOClientSide.pagina)
+                                  .Quantidade(modelParaOClientSide.quantidade)
+                                  .SeletorTabela(".views-departamento-index")
+                                  .ApiTabela("treinamento.views.departamento.index"))
+
+                        </th>
+                        <th class="col text-right">
+                            <label>
+                                <span id="total" class="badge badge-secondary rounded-circle">0</span>
+                            </label>
+                        </th>
+                    </tr>
+                </tfoot>
+            </table>
+        </div>
+    </div>
+</div>
+
+@section Scripts{
+    <script>
+        $(function() {
+            treinamento.carregueJavascript("/js/treinamento.views.departamento.index.js", {
+                callback: function() {
+                    new treinamento.views.departamento.index($("#@(idComponente)"), @Html.Raw(Json.Serialize(@modelParaOClientSide)));
+                }
+            })
+        })
+    </script>
+}
