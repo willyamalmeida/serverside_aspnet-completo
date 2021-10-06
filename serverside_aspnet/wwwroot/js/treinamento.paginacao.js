@@ -24,8 +24,7 @@ treinamento.paginacao.prototype = {
         // inicializar propriedades                        
         this.$elPaginacao = this.$el.find("[name='paginacao'] ul");
 
-        this.$elTabela = this.$el.closest(this.modelParaOClientSide.seletorTabela);
-        this.apiTabela = this.$elTabela.data(this.modelParaOClientSide.apiTabela);
+        this.$elTabela = this.$el.closest(this.modelParaOClientSide.seletorTabela);        
         
         // prepare componentes
         this.prepareComponente();
@@ -93,7 +92,10 @@ treinamento.paginacao.prototype = {
         var _this = this;
         var url = location.origin + "/" + this.modelParaOClientSide.controller + "/" + this.modelParaOClientSide.action;
 
+        var apiTabela = this.$elTabela.data(this.modelParaOClientSide.apiTabela);
+
         var data = {
+            filtro: apiTabela.$elFiltro.val(),
             pagina: this.modelParaOClientSide.pagina,
             quantidade: this.modelParaOClientSide.quantidade
         };
@@ -105,7 +107,7 @@ treinamento.paginacao.prototype = {
             dataType: 'json',
             success: function (resultado) {
                 _this.totalDeItens = resultado.totalDeItens;
-                _this.apiTabela.preencheTabela(resultado);
+                apiTabela.preencheTabela(resultado);
                 _this.preenchePaginacao(resultado);
             },
             error: function () {

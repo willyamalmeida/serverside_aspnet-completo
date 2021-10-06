@@ -35,7 +35,7 @@ namespace serverside_servico.Servicos
 
         public override DtoPaginado<DtoFuncionario> ConsultePaginado(string filtro, int pagina, int quantidade)
         {
-            var resultado = ((IRepositorioFuncionario)Repositorio).ConsultePaginada(pagina, quantidade);
+            var resultado = ((IRepositorioFuncionario)Repositorio).ConsultePaginada(filtro, pagina, quantidade, ObtenhaExpressao);
 
             var conversorFuncionario = (IConversorComCodigoNumerico<DtoFuncionario, Funcionario>)Conversor;
             var conversorPaginado = new ConversorPaginado<DtoFuncionario, Funcionario>(conversorFuncionario);

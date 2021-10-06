@@ -10,6 +10,6 @@ namespace serverside_servico.Infraestrutura.Repositorios
 
         ObjetoPaginado<TObjeto> ConsulteParcial(string filtro, int pagina, int quantidade, Func<string, Expression<Func<TObjeto, bool>>> obtenhaFiltro);
 
-        ObjetoPaginado<TObjeto> ConsultePaginada(int pagina, int quantidade);
+        ObjetoPaginado<TObjeto> ConsultePaginada(string filtro, int pagina, int quantidade, Func<string, Expression<Func<TObjeto, bool>>> obtenhaFiltro);
     }
 }

@@ -11,13 +11,13 @@ namespace serverside_aspnet.Helpers.Builders
         protected TreinamentoCombogridBuilder(IHtmlHelper htmlHelper, string propriedade)
             : base(htmlHelper, propriedade)
         {
-            Model.QtdDeItensRetornados = 0;
+            Model.QtdDeItensRetornados = 7;
         }
 
         protected TreinamentoCombogridBuilder(IHtmlHelper htmlHelper, Expression<Func<object, object>> propriedade)
             : base(htmlHelper, propriedade)
         {
-            Model.QtdDeItensRetornados = 0;
+            Model.QtdDeItensRetornados = 7;
         }
 
         public TBuilder Action(string action)

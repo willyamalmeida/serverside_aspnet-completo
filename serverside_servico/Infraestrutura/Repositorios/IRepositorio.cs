@@ -17,6 +17,8 @@ namespace serverside_servico.Infraestrutura.Repositorios
 
         List<TObjeto> Consulte(Expression<Func<TObjeto, bool>> expressao);
 
+        List<TObjeto> Consulte(string filtro, int quantidade, Func<string, Expression<Func<TObjeto, bool>>> obtenhaFiltro);
+
         List<TObjeto> ConsulteLista();
 
         bool ExisteRegistro(Guid id);

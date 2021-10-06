@@ -44,6 +44,11 @@ namespace serverside_servico.Infraestrutura.Persistencias
             return Persistencia.Consulte(expressao);
         }
 
+        public List<TObjeto> Consulte(string filtro, int quantidade, Func<string, Expression<Func<TObjeto, bool>>> obtenhaFiltro)
+        {
+            return Persistencia.Consulte(filtro, quantidade, obtenhaFiltro);
+        }
+
         public List<TObjeto> ConsulteLista()
         {
             return Persistencia.ConsulteLista();

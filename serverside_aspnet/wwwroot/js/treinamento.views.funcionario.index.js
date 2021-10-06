@@ -24,7 +24,9 @@ treinamento.views.funcionario.index.prototype = {
         this.$elTabelaTotal = this.$el.find("[name='tabela'] tfoot #total");
 
         this.$elFiltro = this.$el.find("[name='filtro']");
-        this.$elAtualizar = this.$el.find("[name='atualizar']");        
+        this.$elAtualizar = this.$el.find("[name='atualizar']");
+
+        this.$elPaginacao = this.$el.find(".treinamento-paginacao");
 
         // prepare componentes
         this.prepareComponente();
@@ -40,8 +42,12 @@ treinamento.views.funcionario.index.prototype = {
     ligaEventos: function() {  
         var _this = this;
 
-        this.$elFiltro.on("keyup", function() {
-            _this.pesquisar();
+        this.$elFiltro.on("keyup", function () {
+            _this.pesquisar(function (retorno) {
+                var apiPaginacao = _this.$elPaginacao.data("treinamento.paginacao");
+                apiPaginacao.atualizePagina(1);
+                apiPaginacao.totalDeItens = retorno.totalDeItens;
+            });
         });  
         
         this.$elAtualizar.on("click", function() {
@@ -71,7 +77,7 @@ treinamento.views.funcionario.index.prototype = {
         this.$elTabelaTotal.text(dados.totalDeItens);
     },
 
-    pesquisar: function() {
+    pesquisar: function(callback) {
         var _this = this;
         var url = location.origin + "/Funcionario/ConsulteParcial";
 
@@ -89,6 +95,11 @@ treinamento.views.funcionario.index.prototype = {
             success: function (retorno) {
                 _this.itensDaTabela = retorno.lista;
                 _this.preencheTabela(retorno);
+
+                if (callback) {
+                    callback(retorno);
+                }
+
                 _this.$el.trigger("tabelaCarregada", retorno);
             }
         }); 

@@ -60,11 +60,10 @@ treinamento.combogrid.prototype = {
         var _this = this;
         var url = location.origin + "/" + this.modelParaOClientSide.controller + "/" + this.modelParaOClientSide.action;
 
-        var data = null;
-
-        if (filtro) {
-            data = { filtro };
-        }
+        var data = {
+            filtro,
+            quantidade: this.modelParaOClientSide.quantidade
+        };
 
         $.ajax({
             type: 'GET',

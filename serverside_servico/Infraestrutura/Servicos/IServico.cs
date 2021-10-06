@@ -9,6 +9,8 @@ namespace serverside_servico.Infraestrutura.Servicos
 
         void Atualize(TDto dto);
 
+        List<TDto> Consulte(string filtro, int quantidade);
+
         List<TDto> ConsulteLista();
     }
 }

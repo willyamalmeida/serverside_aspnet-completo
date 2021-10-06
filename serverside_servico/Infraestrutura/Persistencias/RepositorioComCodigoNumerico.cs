@@ -24,10 +24,16 @@ namespace serverside_servico.Infraestrutura.Persistencias
 
         public ObjetoPaginado<TObjeto> ConsulteParcial(string filtro, int pagina, int quantidade, Func<string, Expression<Func<TObjeto, bool>>> obtenhaFiltro)
         {
-            var objetoPaginado = new ObjetoPaginado<TObjeto>();
-            objetoPaginado.Pagina = pagina;
-            objetoPaginado.Quantidade = quantidade;
-            objetoPaginado.TotalDeItens = Persistencia.Count();
+            return ConsultePaginada(filtro, pagina, quantidade, obtenhaFiltro);
+        }
+
+        public ObjetoPaginado<TObjeto> ConsultePaginada(string filtro, int pagina, int quantidade, Func<string, Expression<Func<TObjeto, bool>>> obtenhaFiltro)
+        {
+            var objetoPaginado = new ObjetoPaginado<TObjeto>
+            {
+                Pagina = pagina,
+                Quantidade = quantidade
+            };
 
             IQueryable<TObjeto> query = Persistencia;
 
@@ -39,31 +45,21 @@ namespace serverside_servico.Infraestrutura.Persistencias
                 query = expressao == null ? query : query.Where(expressao);
             }
 
+            objetoPaginado.TotalDeItens = query.Count();
             objetoPaginado.Lista = query
-                .OrderBy(x => x.Codigo)
-                .Skip((pagina - 1) * quantidade)
-                .Take(quantidade)
-                .ToList();
+               .OrderBy(x => x.Codigo)
+               .Skip((pagina - 1) * quantidade)
+               .Take(quantidade)
+               .ToList();
 
-            return objetoPaginado;
-        }
-
-        public ObjetoPaginado<TObjeto> ConsultePaginada(int pagina, int quantidade)
-        {
-            var objetoPaginado = new ObjetoPaginado<TObjeto>();
-            objetoPaginado.Pagina = pagina;
-            objetoPaginado.Quantidade = quantidade;
-            objetoPaginado.TotalDeItens = Persistencia.Count();
-
-            TObjeto objetoAlias = null;
-
-            objetoPaginado.Lista = UtilitarioNHibernate.Sessao.QueryOver<TObjeto>(() => objetoAlias)
-                //.Where(() => objetoAlias.Codigo == 1)
-                .OrderBy(x => x.Codigo).Asc
-                .Skip((pagina - 1) * quantidade)
-                .Take(quantidade)
-                .List()
-                .ToList();
+            //TObjeto objetoAlias = null;
+            //objetoPaginado.Lista = UtilitarioNHibernate.Sessao.QueryOver<TObjeto>(() => objetoAlias)
+            //    //.Where(() => objetoAlias.Codigo == 1)
+            //    .OrderBy(x => x.Codigo).Asc
+            //    .Skip((pagina - 1) * quantidade)
+            //    .Take(quantidade)
+            //    .List()
+            //    .ToList();
 
             return objetoPaginado;
         }

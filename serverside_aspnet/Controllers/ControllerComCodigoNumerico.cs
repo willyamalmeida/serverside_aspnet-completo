@@ -68,6 +68,14 @@ namespace serverside_aspnet.Controllers
         }
 
         [HttpGet]
+        public virtual IActionResult Consulte(string filtro, int quantidade)
+        {
+            filtro = filtro != null ? HtmlEncoder.Default.Encode(filtro) : filtro;
+            var resultado = ServicoComCodigoNumerico.Consulte(filtro, quantidade);
+            return Json(resultado);
+        }
+
+        [HttpGet]
         public virtual IActionResult ConsulteParcial(string filtro, int pagina, int quantidade)
         {
             filtro = filtro != null ? HtmlEncoder.Default.Encode(filtro) : filtro;

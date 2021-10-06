@@ -43,6 +43,11 @@ namespace serverside_servico.Infraestrutura.Servicos
                 });
         }
 
+        public virtual List<TDto> Consulte(string filtro, int quantidade)
+        {
+            throw new NotImplementedException();
+        }
+
         public virtual List<TDto> ConsulteLista()
         {
             var listaObjeto = Repositorio.ConsulteLista();

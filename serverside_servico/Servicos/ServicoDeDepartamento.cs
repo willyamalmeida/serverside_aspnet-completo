@@ -1,4 +1,6 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.Linq;
 using System.Linq.Expressions;
 using serverside_servico.Dtos;
 using serverside_servico.Infraestrutura.Conversores;
@@ -35,7 +37,7 @@ namespace serverside_servico.Servicos
 
         public override DtoPaginado<DtoDepartamento> ConsultePaginado(string filtro, int pagina, int quantidade)
         {
-            var resultado = ((IRepositorioDepartamento)Repositorio).ConsultePaginada(pagina, quantidade);
+            var resultado = ((IRepositorioDepartamento)Repositorio).ConsultePaginada(filtro, pagina, quantidade, ObtenhaExpressao);
 
             var conversorFuncionario = (IConversorComCodigoNumerico<DtoDepartamento, Departamento>)Conversor;
             var conversorPaginado = new ConversorPaginado<DtoDepartamento, Departamento>(conversorFuncionario);
@@ -43,6 +45,14 @@ namespace serverside_servico.Servicos
             var dtoPaginado = conversorPaginado.ConvertaParaDto(resultado);
 
             return dtoPaginado;
+        }
+
+        public override List<DtoDepartamento> Consulte(string filtro, int quantidade)
+        {
+            var listaObjeto = Repositorio.Consulte(filtro, quantidade, ObtenhaExpressao);
+            var listaDto = Conversor.Converta(listaObjeto);
+
+            return listaDto.OrderBy(x => x.Codigo).ToList();
         }
 
         private Expression<Func<Departamento, bool>> ObtenhaExpressao(string filtro)

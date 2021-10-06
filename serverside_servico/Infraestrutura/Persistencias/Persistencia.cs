@@ -80,6 +80,27 @@ namespace serverside_servico.Infraestrutura.Persistencias
             return listaDeObjetos;
         }
 
+        public List<TObjeto> Consulte(string filtro, int quantidade, Func<string, Expression<Func<TObjeto, bool>>> obtenhaFiltro)
+        {
+            IQueryable<TObjeto> queryComFiltro = null;
+
+            if (!string.IsNullOrWhiteSpace(filtro))
+            {
+                filtro = filtro.ToUpperInvariant();
+                var expressao = obtenhaFiltro(filtro);
+
+                queryComFiltro = expressao == null ? Query() : Query().Where(expressao);
+            }
+
+            var query = queryComFiltro == null
+                ? Query()
+                : queryComFiltro;
+
+            var resultado = query.Take(quantidade).ToList();
+
+            return resultado;
+        }
+
         public List<TObjeto> ConsulteLista()
         {
             var listaDeObjetos = Query().ToList();
